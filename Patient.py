@@ -20,23 +20,35 @@ class Patient(Person):
         self.__postcode = postcode
         self.__doctor = 'None'
         self.__symptoms = symptoms
-       
+        
 
     
     # def full_name(self) :
     #     """full name is first_name and surname"""
     #     #ToDo2
     #     pass
-
+    def get_age(self):
+        return self.__age
+    
+    def get_mobile(self):
+        return self.__mobile
+    
+    def get_postcode(self):
+        return self.__postcode
 
     def get_doctor(self) :
         #ToDo3
         return self.__doctor
+    
+    def get_family_details(self):
+        pass
 
     def link(self, doctor):
         """Args: doctor(string): the doctor full name"""
         self.__doctor = doctor
-
+    def get_symptoms(self):
+        return self.__symptoms
+    
     def print_symptoms(self):
         """prints all the symptoms"""
         #ToDo4

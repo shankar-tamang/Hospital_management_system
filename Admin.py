@@ -197,6 +197,9 @@ class Admin:
         else:
             print('Invalid operation choosen. Check your spelling!')
 
+    # def group_same_family(patients):
+    #     for patient in patients:
+
 
     def view_patient(self, patients):
         """
@@ -310,6 +313,79 @@ class Admin:
         print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
         #ToDo13
         self.view(discharged_patients)
+
+    def add_patient_data(self, patients):
+        with open("patient_data.txt","a")as file:
+            patient_data_list = []
+            for patient in patients:
+                file.write(f"{patient.get_full_name()}: {patient.get_age()}, {patient.get_mobile()}, {patient.get_postcode()}, {patient.get_symptoms()}\n")
+            
+    def relocate_doctors(self, doctors, patients):
+        print("-----Relocate-----")
+
+        print("-----Patients to new doctor -----")
+        print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
+        self.view(patients)
+
+        patient_index = input('Please enter the patient ID: ')
+
+        try:
+            # patient_index is the patient ID mines one (-1)
+            patient_index = int(patient_index) -1
+
+            # check if the id is not in the list of patients
+            if patient_index not in range(len(patients)):
+                print('The id entered was not found.')
+                return # stop the procedures
+
+        except ValueError: # the entered id could not be changed into an int
+            print('The id entered is incorrect')
+            return # stop the procedures
+
+        print("-----Doctors Select-----")
+        print('Select new doctor:')
+        # patients[patient_index].print_symptoms() # print the patient symptoms
+
+        print('--------------------------------------------------')
+        print('ID |          Full Name           |  Speciality   ')
+        self.view(doctors)
+        doctor_index = input('Please enter the doctor ID: ')
+
+        try:
+            # doctor_index is the patient ID mines one (-1)
+            doctor_index = int(doctor_index) -1
+
+            # check if the id is in the list of doctors
+            if self.find_index(doctor_index,doctors)!=False:
+                    
+                # link the patients to the doctor and vice versa
+                #ToDo11
+                patients[patient_index].link(doctors[doctor_index].get_full_name())
+                doctors[doctor_index].add_patient(patients[patient_index].get_full_name)     
+                # .append(patients[patient_index].get_full_name())
+
+                print('The patient is now assign to the doctor.')
+
+            # if the id is not in the list of doctors
+            else:
+                print('The id entered was not found.')
+
+        except ValueError: # the entered id could not be changed into an in
+            print('The id entered is incorrect')
+
+    def management_report(self, doctors):
+
+        print('<----------- Management Report ------------>\n')
+        print("----- Doctors info -----")
+        print('--------------------------------------------------')
+        print('ID |          Full Name           |  Speciality   ')
+        self.view(doctors)
+        print(f"The total no. of doctor : {len(doctors)}\n") # shows the total no. of doctor in the system.
+
+        print("--- Patients per Doctor ---")
+        for doctor in doctors:
+            doctor.show_patient()
+            print(f'The total no. of patient is {len(doctor.__patients)}')  #prints the total no. of patients per doctor
 
     def update_details(self):
         """

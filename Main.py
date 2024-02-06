@@ -30,7 +30,10 @@ def main():
         print(' 3- View discharged patient')
         print(' 4- Assign doctor to a patient')
         print(' 5- Update admin details')
-        print(' 6- Quit')
+        print(' 6- store patient details')
+        print(' 7- relocate the patient')
+        
+        print(' 8- Quit')
 
         # get the option
         op = input('Option: ')
@@ -81,10 +84,20 @@ def main():
             admin.update_details()
 
         elif op == '6':
+            admin.add_patient_data(patients)
+
+        elif op == '7':
+            admin.relocate_doctors(doctors, patients)
+        
+        elif op == '8':
+            admin.management_report(doctors)
+
+        elif op == '9':
             # 6 - Quit
             #ToDo5
             print("<------------ goodbye-------------->")
             break
+
 
         else:
             # the user did not enter an option that exists in the menu
