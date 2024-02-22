@@ -1,0 +1,6 @@
+Jone,Smith,Pediatrics
+Jone,Carlos,Cardiology
+shankar,Tamang,ST
+Black,panther,life
+ishan,silwal,mutu
+SSS,sss,ss

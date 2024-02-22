@@ -1,4 +1,6 @@
 from Doctor import Doctor
+from Patient import Patient
+import matplotlib.pyplot as plt
 
 
 class Admin:
@@ -22,6 +24,7 @@ class Admin:
             a_list (list): a list of printables
         """
         for index, item in enumerate(a_list):
+            
             print(f'{index+1:3}|{item}')
 
     def login(self) :
@@ -36,32 +39,15 @@ class Admin:
     
         print("-----Login-----")
         #Get the details of the admin
-
         username = input('Enter the username: ')
         password = input('Enter the password: ')
-
-        # check if the username and password match the registered ones
-        #ToDo1
-        return self.__username in username and password in self.__password
-        # if username == self.__username and password == self.__password:
-        #     print("You are logged in....")
-        #     return True
-            
-
-        # else:
-        #     return False
+        return self.__username == username and password == self.__password
+       
 
     def find_index(self,index,doctors):
         
             # check that the doctor id exists  
         return index in range(0,len(doctors))
-        # if index in range(0,len(doctors)): 
-            
-        #     return True
-
-        # # if the id is not in the list of doctors
-        # else:
-        #     return False
             
     def get_doctor_details(self) :
         """
@@ -70,10 +56,13 @@ class Admin:
             first name, surname and ...
                             ... the speciality of the doctor in that order.
         """
-        #ToDo2
+        
         first_name = input("Enter the first name: ")
         surname = input("Enter the surname: ")
         speciality = input("Enter the specaility: ")
+
+
+
 
 
         return first_name, surname, speciality
@@ -94,7 +83,7 @@ class Admin:
         print(' 3 - Update')
         print(' 4 - Delete')
 
-        #ToDo3
+        
         op = input("Enter you option: ")
 
 
@@ -112,39 +101,39 @@ class Admin:
             name_exists = False
             for doctor in doctors:
                 if first_name == doctor.get_first_name() and surname == doctor.get_surname():
-                    print('Name already exists.')
-                    #ToDo5
+                    print('Name already exists.')                    
                     break # save time and end the loop
-                name_exists == True
-            
-            doctors.append(Doctor(first_name, surname, speciality))
+                else:
+                    with open("doctor.txt",'a') as file:
+                        file.write(f"\n")
+                        file.write(f"{first_name},{surname},{speciality}")  # appending the newly registered doctor details in doctor.txt
 
-
-            #ToDo6
-            # add the doctor ...
-                                                      # ... to the list of doctors
-            print('Doctor registered.')
+                    print('Doctor registered.')
+                    break
 
         # View
         elif op == '2':
             print("-----List of Doctors-----")
-            #ToDo7
+            
             print('ID |          Full name           |  Speciality')
-            self.view(doctors)
             
-            
-
+            doctors = self.load_doctor_file("doctor.txt")    #loading doctors details from doctor.txt and creating a list of instance called doctors    
+            self.view(doctors)                 
+ 
 
         # Update
         elif op == '3':
             while True:
                 print("-----Update Doctor`s Details-----")
                 print('ID |          Full name           |  Speciality')
+
+                doctors = self.load_doctor_file("doctor.txt")
+                
                 self.view(doctors)
                 try:
                     index = int(input('Enter the ID of the doctor: ')) - 1
-                    doctor_index=self.find_index(index,doctors)
-                    if doctor_index!=False:  #why not simply  if doctor_index:
+                    doctor_index=self.find_index(index,doctors)  # checks if the id exists or not
+                    if doctor_index!=False:  
                 
                         break
                         
@@ -163,43 +152,109 @@ class Admin:
             print(' 1 First name')
             print(' 2 Surname')
             print(' 3 Speciality')
-            op = int(input('Input: ')) # make the user input lowercase
+             
 
-            #ToDo8
-            if op == 1:
-                first_name = input("Enter the new first name:")
-                doctors[index].set_first_name(new_speciality)
+            try:
+                op = int(input('Input: '))
+                if op == 1:
+                    new_first_name = input("Enter the new first name:")
+                    doctors[index].set_first_name(index,new_first_name,'doctor.txt')
 
-            elif op == 2:
-                new_surname = input("Enter the new surname: ")
-                doctors[index].set_surname(new_surname)
+                elif op == 2:
+                    new_surname = input("Enter the new surname: ")
+                    doctors[index].set_surname(index,new_surname,'doctor.txt')
 
-            elif op == 3:
-                new_speciality = input("Enter the new Speciality:")
-                doctors[index].set_speciality(new_speciality)
+                elif op == 3:
+                    new_speciality = input("Enter the new Speciality:")
+                    doctors[index].set_speciality(index,new_speciality,'doctor.txt')
+
+                else: 
+                    print("Invalid input.")
+            except ValueError:
+                print("Only numbers are allowed.")
 
         # Delete
         elif op == '4':
             print("-----Delete Doctor-----")
             print('ID |          Full Name           |  Speciality')
+            
+            doctors = self.load_doctor_file("doctor.txt")
             self.view(doctors)
 
             doctor_index = input('Enter the ID of the doctor to be deleted: ')
-            #ToDo9
+            
             if int(doctor_index) in range(1,len(doctors)+1):
-                del doctors[int(doctor_index)-1]
+                deleted_name = doctors.pop(int(doctor_index)-1)
+                with open('doctor.txt','w') as file:
+                    for id,doctor in enumerate(doctors):
+
+                        if  id!= len(doctors) - 1:
+                            file.write(f"{doctor.get_first_name()},{doctor.get_surname()},{doctor.get_speciality()}\n")
+
+                        else:
+                            file.write(f"{doctor.get_first_name()},{doctor.get_surname()},{doctor.get_speciality()}")
+
+                    print("Doctor has been deleted.")
+
                 return  # to check again as the returning True isn't of much value
 
            
             print('The id entered is incorrect')
 
+
+
+
         # if the id is not in the list of patients
         else:
             print('Invalid operation choosen. Check your spelling!')
 
-    # def group_same_family(patients):
-    #     for patient in patients:
+    def appointments_management(self):
+            
 
+            print("1. Book Appointments\n2. View Appointment")
+            op = input("Enter your options: ")
+
+            if op == '1':
+
+                print("------ Book Appointments ------")
+
+                patients = self.load_patient_file("patient.txt")   
+
+                self.view_patient(patients)
+
+                patient_id = input("Enter the patient you want to appoint to: ")
+
+                if self.find_index(int(patient_id) - 1, patients):
+                    patient_to_appoint = patients[int(patient_id) - 1]
+                
+                    doctors = self.load_doctor_file('doctor.txt')
+                    print('ID |          Full Name           |  Speciality')
+
+                    self.view(doctors)
+
+            
+                    doctor_id = input("Enter the doctor id: ")
+
+                    new_index = int(doctor_id) - 1
+
+                    month = input("Enter the month to appoint:")
+                    #patient data is send to set appointment
+                    if self.find_index(new_index,doctors):
+                        doctors[new_index].set_appointments(patient_to_appoint,month)
+                        print(patient_to_appoint)
+
+                    else:
+                        print("Doctor ID not found!")
+                
+                else:
+                    print("Patient ID not found !")
+
+            elif op == '2':
+                print("------- View Appointment -------")
+                doctors[new_index].get_appointments()
+
+            else:
+                print("Invalid input!")
 
     def view_patient(self, patients):
         """
@@ -209,8 +264,62 @@ class Admin:
         """
         print("-----View Patients-----")
         print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
-        #ToDo10
+        
         self.view(patients)
+
+    def patient_management(self,patients):
+        print("1. View Patient")
+        print("2. Add Patient")
+        print("3. Patient family")
+        op = input("Enter your option: ")
+
+        if op == '1':
+
+            # view patient
+            patients = self.load_patient_file("patient.txt")   
+
+            self.view_patient(patients)
+
+        elif op == '2':
+
+            # add patient 
+
+            with open("patient.txt",'a') as file:
+                first_name = input("Enter first name: ")
+                surname = input("Enter surname: ")
+                age = input("age: ")
+                mobile = input("mobile: ")
+                postcode = input("postcode: ")
+                symptom = input("Enter symptoms(first_symptoms, second_symptoms): ")
+                symptoms = symptom.split(", ")
+
+                file.write("\n")
+                file.write(
+                    f"{first_name},{surname},{age},{mobile},{postcode},None,{','.join(symptoms)}"
+                    )
+
+
+            patients = self.load_patient_file("patient.txt")   
+            print("Patient added successfully.")
+
+        elif op == '3':
+            patients = self.load_patient_file("patient.txt")   
+            surnames = {}
+            for patient in patients:
+                if patient.get_surname() not in surnames:
+                    surnames[patient.get_surname()] = [patient]  # adding the patient object to the surname dictionary value by creating a new key
+                    
+                else:
+                    surnames[patient.get_surname()].append(patient)
+                    #add the patient object to the surname key tha thas already appeared
+            
+            
+            for surname in surnames:
+                print(f"The {surname.capitalize()} Family:")
+                # for fam in surnames[surname]: #accessing individual patient from the list
+                self.view_patient(surnames[surname])
+                print("\n")
+
 
     def assign_doctor_to_patient(self, patients, doctors):
         """
@@ -223,6 +332,8 @@ class Admin:
 
         print("-----Patients-----")
         print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
+
+
         self.view(patients)
 
         patient_index = input('Please enter the patient ID: ')
@@ -272,7 +383,9 @@ class Admin:
             print('The id entered is incorrect')
 
 
-    def discharge(self, patients, discharge_patients):
+
+
+    def discharge(self, patients, discharged_patients):
         """
         Allow the admin to discharge a patient when treatment is done
         Args:
@@ -281,25 +394,41 @@ class Admin:
         """
         print("-----Discharge Patient-----")
 
-        patient_index = input('Please enter the patient ID: ')
 
-        #ToDo12
-        # if int(patient_index)
+      
         try:
-            # if int(patient_index) < len(patients):
-            #     discharge_patient = patients.pop(int(patient_index) - 1)
-            #     discharge_patients.append(discharge_patient)
-            #     return discharge_patients
-            # else:
-            #     return False
-            if self.find_index(int(patient_index),patients):
-                discharge_patient = patients.pop(int(patient_index) - 1)
-                discharge_patients.append(discharge_patient)
-                return discharge_patients
-            else: return False
+            patient_index = int(input('Please enter the patient ID: '))
+
+            if self.find_index(patient_index-1,patients):
+
+                discharge_patient = patients.pop(patient_index - 1)
+                discharged_patients.append(discharge_patient)
+                with open("patient.txt","w") as file:
+
+                    for n, patient in enumerate(patients):
+
+                        if n != len(patients)-1:
+
+                            row = f"{patient.get_first_name()},{patient.get_surname()},{patient.get_age()},{patient.get_mobile()},{patient.get_postcode()},{patient.get_doctor()},{','.join(patient.get_symptoms())}"
+
+                            file.write(row + '\n')   
+
+                        else:
+
+                            row = f"{patient.get_first_name()},{patient.get_surname()},{patient.get_age()},{patient.get_mobile()},{patient.get_postcode()},{patient.get_doctor()},{','.join(patient.get_symptoms())}"
+
+                            file.write(row)
+            
+                return True
+            else: 
+                return False
 
         except ValueError:
-            return "value_error"
+            print("Only numbers are allowed (1, 2, ...)")
+        
+        except Exception as e:
+            print(e)
+
 
 
     def view_discharge(self, discharged_patients):
@@ -308,17 +437,15 @@ class Admin:
         Args:
             discharge_patients (list<Patients>): the list of all the non-active patients
         """
+        if discharged_patients :
+            print("-----Discharged Patients-----")
+            print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
+            
+            self.view(discharged_patients)
 
-        print("-----Discharged Patients-----")
-        print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
-        #ToDo13
-        self.view(discharged_patients)
+        else: 
+            print("No patients are discharged yet.")
 
-    def add_patient_data(self, patients):
-        with open("patient_data.txt","a")as file:
-            patient_data_list = []
-            for patient in patients:
-                file.write(f"{patient.get_full_name()}: {patient.get_age()}, {patient.get_mobile()}, {patient.get_postcode()}, {patient.get_symptoms()}\n")
             
     def relocate_doctors(self, doctors, patients):
         print("-----Relocate-----")
@@ -359,7 +486,7 @@ class Admin:
             if self.find_index(doctor_index,doctors)!=False:
                     
                 # link the patients to the doctor and vice versa
-                #ToDo11
+                
                 patients[patient_index].link(doctors[doctor_index].get_full_name())
                 doctors[doctor_index].add_patient(patients[patient_index].get_full_name)     
                 # .append(patients[patient_index].get_full_name())
@@ -373,19 +500,112 @@ class Admin:
         except ValueError: # the entered id could not be changed into an in
             print('The id entered is incorrect')
 
-    def management_report(self, doctors):
+    def management_report(self, doctors,patients):
 
+
+        # doctors = self.load_doctor_file("doctor.txt")
+        # patients = self.load_patient_file("patient.txt")
         print('<----------- Management Report ------------>\n')
+
         print("----- Doctors info -----")
         print('--------------------------------------------------')
         print('ID |          Full Name           |  Speciality   ')
         self.view(doctors)
         print(f"The total no. of doctor : {len(doctors)}\n") # shows the total no. of doctor in the system.
 
+
+
         print("--- Patients per Doctor ---")
+
         for doctor in doctors:
-            doctor.show_patient()
-            print(f'The total no. of patient is {len(doctor.__patients)}')  #prints the total no. of patients per doctor
+            # print(doctor)
+            if doctor.get_patients():
+            
+                # doctor.show_patient()
+                print(f'Dr. {doctor.get_full_name()}: {len(doctor.get_patients())} patients')  #prints the total no. of patients per doctor
+            else:
+                print(f"Dr. {doctor.get_full_name()}: 0 patients.")
+
+        doctor_names = [f"Dr. {doctor.get_full_name()}" for doctor in doctors]
+        patient_counts = [len(doctor.get_patients()) for doctor in doctors]
+        plt.bar(doctor_names, patient_counts)
+
+
+
+        print("----- Monthly appointments per doctor --------")
+
+        with open('appointment.txt') as file:
+            lines = file.readlines()
+
+        for id,doctor in enumerate(doctors):
+            print(f'Doctor: {doctor.get_full_name()}')
+            line = lines[id]
+            
+            data_string = line
+
+            # Split the string into individual parts
+            parts = data_string.split("-")
+
+            # Initialize an empty dictionary to store the results
+            result_dict = {}
+
+            # Iterate through the parts and extract month and names
+            for part in parts:
+                # Split each part into month and names
+                month, *names = part.split(",")
+                
+                # Remove any leading or trailing whitespace
+                month = month.strip()
+                names = [name.strip() for name in names]
+                
+                # Add the month and names to the dictionary
+                if month not in result_dict:
+                    result_dict[month] = names
+                else:
+                    result_dict[month].extend(names)
+
+            
+
+            if result_dict:
+
+                
+                for month, appointments in result_dict.items():
+                    
+                    print(f"{month}: {len(appointments)}patient")
+
+                print("\n")
+                    
+                    
+            else:
+                print("No appointments scheduled.")
+        
+        print(" ----- Illness type ------")
+
+        patients_per_illness = self.sort_ilness(patients)
+
+        for symptom,patient_no in patients_per_illness.items():
+            print(f"{symptom:<10}: {patient_no} patients")
+
+
+        plt.xlabel('Doctors')
+        plt.ylabel('Number of Patients')
+        plt.title('Patients per Doctor')
+        plt.xticks(rotation=45, ha='right')
+        plt.show()
+            
+
+        symptoms = list(patients_per_illness.keys())
+        patient_numbers = list(patients_per_illness.values())
+        plt.bar(symptoms, patient_numbers)
+        plt.xlabel('Illness Type')
+        plt.ylabel('Number of Patients')
+        plt.title('Illness Type')
+        plt.xticks(rotation=45, ha='right')
+        plt.show()
+         
+        
+
+
 
     def update_details(self):
         """
@@ -396,27 +616,120 @@ class Admin:
         print(' 1 Username')
         print(' 2 Password')
         print(' 3 Address')
-        op = int(input('Input: '))
 
-        if op == 1:
-            #ToDo14
-            username = input("Enter the new username: ")
-            if username == input("Enter the new username again: "):
-                self.__username = username
+        try:
+            op = int(input('Input: '))
 
-        elif op == 2:
-            password = input('Enter the new password: ')
-            # validate the password
-            if password == input('Enter the new password again: '):
-                self.__password = password
+            if op == 1:
+                # set user name
+                
+                username = input("Enter the new username: ")
+                if username == input("Enter the new username again: "):
+                    with open('admin.txt', 'w') as file:
+                        file.write(f"{username},{self.__password},{self.__address}")
+                    print("New username has been set.")
 
-        elif op == 3:
-            #ToDo15
-            address = input("Enter the new address: ")
-            if address == input("Enter the new address again: "):
-                self.__address = address
+                else: 
+                    print("New username confirmation failed.")
 
-        else:
-            #ToDo16
+                
+            elif op == 2:
+                password = input('Enter the new password: ')
+                # validate the password
+                if password == input('Enter the new password again: '):
+                    with open('admin.txt', 'w') as file:
+                        file.write(f"{self.__username},{password},{self.__address}")
+                    print("New password has been set.")
+
+                else:
+                    print("New password has been set.")
+
+            elif op == 3:   
+                # set new address             
+                address = input("Enter the new address: ")
+                if address == input("Enter the new address again: "):
+                    with open('admin.txt', 'w') as file:
+                        file.write(f"{self.__username},{self.__password},{address}")
+                    print("New address has been set.")
+
+                else:
+                    print("New address confirmation failed.")
+
+            else:
+                
+                print("Invalid response. Enter(1/2/3)")
+
+        except ValueError:
             print("Invalid response. Enter(1/2/3)")
+
+        except Exception as e:
+            print(e)
+
+    
+
+
+    def load_patient_file(self,file_name):
+        patient_list = []
+
+        try:
+            with open(file_name, 'r') as file:
+                for line in file:
+                    # Split the line by comma to extract patient attributes
+                    
+                    string_list = line.split(",")
+                    
+                    # Create a new Patient object and append it to the patient_list
+                    symptoms = string_list[6:]
+                    symptoms[-1] = symptoms[-1].replace('\n', '')
+                    patient_list.append(                     
+                        Patient(string_list[0],string_list[1],string_list[2],string_list[3],string_list[4],string_list[5],symptoms)
+                    )
+        except Exception as e:
+            print(f"Error: yes {e}")
+        
+        return patient_list
+    
+    def load_doctor_file(self,file_name):
+        doctor_list = []
+
+        try:
+            with open(file_name, 'r') as file:
+                for line in file:
+                    # Split the line by comma to extract patient attributes
+                    string_list = line.split(",")
+                    # Create a new Patient object and append it to the patient_list
+                    string_list[-1] = string_list[-1].replace('\n','')
+                    
+                    doctor_list.append(
+                        Doctor(
+                            first_name = string_list[0], 
+                            surname = string_list[1], 
+                            speciality = string_list[2], 
+                            
+                        )
+                    )
+
+        except Exception as e:
+            print(f"Error: {e}")
+            
+        
+
+       
+        return doctor_list
+    
+    # def load_admin_file(self,file_name):
+
+    
+    def sort_ilness(self, patients):
+        symptoms_and_patient = {}
+
+        for patient in patients:
+            for symptom in patient.get_symptoms():
+                if symptom not in symptoms_and_patient:
+                    symptoms_and_patient[symptom] = 1
+
+                else:
+                    symptoms_and_patient[symptom] += 1
+
+        return symptoms_and_patient
 
