@@ -1,3 +1,4 @@
+import datetime
 from Doctor import Doctor
 from Patient import Patient
 import matplotlib.pyplot as plt
@@ -43,7 +44,9 @@ class Admin:
         password = input('Enter the password: ')
         return self.__username == username and password == self.__password
        
-
+    def login_for_GUI(self, username, password) :
+        # check if the username and password match the registered ones
+        return self.__username in username and self.__password == password
     def find_index(self,index,doctors):
         
             # check that the doctor id exists  
@@ -236,11 +239,13 @@ class Admin:
                     doctor_id = input("Enter the doctor id: ")
 
                     new_index = int(doctor_id) - 1
-
-                    month = input("Enter the month to appoint:")
+                    current_date = datetime.date.today
+                    month_name = current_date.strftime("%B")
+                    day_of_month = current_date.day
+                    appointment_date =(month_name,day_of_month)
                     #patient data is send to set appointment
                     if self.find_index(new_index,doctors):
-                        doctors[new_index].set_appointments(patient_to_appoint,month)
+                        doctors[new_index].set_appointments(patient_to_appoint,appointment_date)
                         print(patient_to_appoint)
 
                     else:

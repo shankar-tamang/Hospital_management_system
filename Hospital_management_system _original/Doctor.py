@@ -16,7 +16,6 @@ class Doctor(Person):
         self.__speciality = speciality
         self.__patients = []
         self.__appointments = []
-        self.__doctor_appointments = {}
 
 
     def set_first_name(self,index,first_name,file_name):

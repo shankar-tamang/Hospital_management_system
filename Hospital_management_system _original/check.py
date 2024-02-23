@@ -120,4 +120,28 @@
 
 # print(sort_ilness(patients))
 
-print("an" in "shankar")
+# print("an" in "shankar")
+# import datetime
+
+# # Get the current date
+# current_date = datetime.date.today()
+
+# # Get the month and day of the month
+# month = current_date.month
+# day_of_month = current_date.day
+
+# print("Month:", month)
+# print("Day of the month:", day_of_month)
+import datetime
+
+# Get the current date
+current_date = datetime.date.today()
+
+# Get the month name
+month_name = current_date.strftime("%B")  # %B returns the full month name
+
+# Get the day of the month
+day_of_month = current_date.day
+
+print("Month:", month_name)
+print("Day of the month:", day_of_month)
