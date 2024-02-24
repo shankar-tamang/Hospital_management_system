@@ -256,8 +256,6 @@ class Admin:
                     #patient data is send to set appointment
                     if self.find_index(new_index,doctors):
                         doctors[new_index].set_appointments(patient_to_appoint,month_name)
-                        print(patient_to_appoint)
-
                     else:
                         print("Doctor ID not found!")
                 
@@ -270,7 +268,7 @@ class Admin:
                 for id, doctor in enumerate(doctors):
                     appointment = doctor.get_appointments()
                     
-                    print(f"{doctor.get_full_name()}: {len(appointment)} patients")
+                    print(f"{doctor.get_full_name()}: {len(appointment)} appointments")
 
             else:
                 print("Invalid input!")
@@ -292,14 +290,12 @@ class Admin:
         for patient in patients:
             if patient.get_surname() not in surnames:
                 surnames[patient.get_surname()] = [patient]  # adding the patient object to the surname dictionary value by creating a new key
-                print("new")
                 
             else:
                 surnames[patient.get_surname()].append(patient)
                 #add the patient object to the surname key tha thas already appeared
-                print("now new")
 
-        print(surnames)
+        # print(surnames)
         return surnames
         
         # for surname in surnames:
@@ -571,67 +567,29 @@ class Admin:
         doctor_names = [f"Dr. {doctor.get_full_name()}" for doctor in doctors]
         patient_counts = [len(doctor.get_patients()) for doctor in doctors]
         plt.bar(doctor_names, patient_counts)
+        print("\n")
 
 
 
         print("----- Monthly appointments per doctor --------")
 
-        # with open('appointment.txt') as file:
-        #     lines = file.readlines()
 
-        # for id,doctor in enumerate(doctors):
-        #     print(f'Doctor: {doctor.get_full_name()}')
-        #     line = lines[id]
-            
-        #     data_string = line
-
-        #     # Split the string into individual parts
-        #     parts = data_string.split("-")
-
-        #     # Initialize an empty dictionary to store the results
-        #     result_dict = {}
-
-        #     # Iterate through the parts and extract month and names
-        #     for part in parts:
-        #         # Split each part into month and names
-        #         month, *names = part.split(",")
-                
-        #         # Remove any leading or trailing whitespace
-        #         month = month.strip()
-        #         names = [name.strip() for name in names]
-                
-        #         # Add the month and names to the dictionary
-        #         if month not in result_dict:
-        #             result_dict[month] = names
-        #         else:
-        #             result_dict[month].extend(names)
-
-            
-
-        #     if result_dict:
-
-                
-        #         for month, appointments in result_dict.items():
-                    
-        #             print(f"{month}: {len(appointments)}patient")
-
-        #         print("\n")
-                    
-                    
-        #     else:
-        #         print("No appointments scheduled.")
-
-
-        for doctor in doctors:
+        for id, doctor in enumerate(doctors):
             monthly_patient = doctor.get_monthly_appointment().items()
-            print(doctor.get_full_name())
+            print(f"{id+1:>3}) {doctor.get_full_name()}")
+
+            
             if monthly_patient:
                 for month, patient in doctor.get_monthly_appointment().items():
                     
-                    print(f"{month}: {len(patient)}")
+                    print(f"      {month}: {len(patient)} appointments")
+                    print("\n")
+                    
 
             else:
-                print("0 appointments")
+                print("    0 appointments for any months")
+                print("\n")
+        
 
 
         

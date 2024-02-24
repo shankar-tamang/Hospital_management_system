@@ -90,7 +90,7 @@ class Doctor(Person):
             self.__doctor_appointments[month].append(appointment)
 
         self.__appointments.append(appointment)
-        print(self.get_monthly_appointment())
+        # print(self.get_monthly_appointment())
         print("Appointment has been set.")
 
     def get_monthly_appointment(self):
