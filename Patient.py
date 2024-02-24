@@ -38,8 +38,7 @@ class Patient(Person):
     def get_postcode(self):
         return self.__postcode
 
-    def get_doctor(self) :
-        
+    def get_doctor(self):        
         return self.__doctor
     
     def get_family_details(self):

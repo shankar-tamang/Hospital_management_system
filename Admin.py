@@ -28,6 +28,16 @@ class Admin:
             
             print(f'{index+1:3}|{item}')
 
+    def get_username(self):
+        return self.__username
+    
+    def get_password(self):
+        return self.__password
+    
+    def get_address(self):
+        return self.__address
+    
+
     def login(self) :
         """
         A method that deals with the login
@@ -130,7 +140,7 @@ class Admin:
                 print("-----Update Doctor`s Details-----")
                 print('ID |          Full name           |  Speciality')
 
-                doctors = self.load_doctor_file("doctor.txt")
+                # doctors = self.load_doctor_file("doctor.txt")
                 
                 self.view(doctors)
                 try:
@@ -181,7 +191,7 @@ class Admin:
             print("-----Delete Doctor-----")
             print('ID |          Full Name           |  Speciality')
             
-            doctors = self.load_doctor_file("doctor.txt")
+            # doctors = self.load_doctor_file("doctor.txt")
             self.view(doctors)
 
             doctor_index = input('Enter the ID of the doctor to be deleted: ')
@@ -211,7 +221,7 @@ class Admin:
         else:
             print('Invalid operation choosen. Check your spelling!')
 
-    def appointments_management(self):
+    def appointments_management(self,doctors):
             
 
             print("1. Book Appointments\n2. View Appointment")
@@ -230,7 +240,7 @@ class Admin:
                 if self.find_index(int(patient_id) - 1, patients):
                     patient_to_appoint = patients[int(patient_id) - 1]
                 
-                    doctors = self.load_doctor_file('doctor.txt')
+                    # doctors = self.load_doctor_file('doctor.txt')
                     print('ID |          Full Name           |  Speciality')
 
                     self.view(doctors)
@@ -239,13 +249,13 @@ class Admin:
                     doctor_id = input("Enter the doctor id: ")
 
                     new_index = int(doctor_id) - 1
-                    current_date = datetime.date.today
+                    current_date = datetime.date.today()
                     month_name = current_date.strftime("%B")
                     day_of_month = current_date.day
                     appointment_date =(month_name,day_of_month)
                     #patient data is send to set appointment
                     if self.find_index(new_index,doctors):
-                        doctors[new_index].set_appointments(patient_to_appoint,appointment_date)
+                        doctors[new_index].set_appointments(patient_to_appoint,month_name)
                         print(patient_to_appoint)
 
                     else:
@@ -256,7 +266,11 @@ class Admin:
 
             elif op == '2':
                 print("------- View Appointment -------")
-                doctors[new_index].get_appointments()
+
+                for id, doctor in enumerate(doctors):
+                    appointment = doctor.get_appointments()
+                    
+                    print(f"{doctor.get_full_name()}: {len(appointment)} patients")
 
             else:
                 print("Invalid input!")
@@ -271,6 +285,29 @@ class Admin:
         print('ID |          Full Name           |      Doctor`s Full Name      | Age |    Mobile     | Postcode ')
         
         self.view(patients)
+
+    def sort_by_surname_gui(self):
+        patients = self.load_patient_file("patient.txt")   
+        surnames = {}
+        for patient in patients:
+            if patient.get_surname() not in surnames:
+                surnames[patient.get_surname()] = [patient]  # adding the patient object to the surname dictionary value by creating a new key
+                print("new")
+                
+            else:
+                surnames[patient.get_surname()].append(patient)
+                #add the patient object to the surname key tha thas already appeared
+                print("now new")
+
+        print(surnames)
+        return surnames
+        
+        # for surname in surnames:
+        #     print(f"The {surname.capitalize()} Family:")
+        #     # for fam in surnames[surname]: #accessing individual patient from the list
+        #     self.view_patient(surnames[surname])
+        #     print("\n")
+
 
     def patient_management(self,patients):
         print("1. View Patient")
@@ -539,50 +576,64 @@ class Admin:
 
         print("----- Monthly appointments per doctor --------")
 
-        with open('appointment.txt') as file:
-            lines = file.readlines()
+        # with open('appointment.txt') as file:
+        #     lines = file.readlines()
 
-        for id,doctor in enumerate(doctors):
-            print(f'Doctor: {doctor.get_full_name()}')
-            line = lines[id]
+        # for id,doctor in enumerate(doctors):
+        #     print(f'Doctor: {doctor.get_full_name()}')
+        #     line = lines[id]
             
-            data_string = line
+        #     data_string = line
 
-            # Split the string into individual parts
-            parts = data_string.split("-")
+        #     # Split the string into individual parts
+        #     parts = data_string.split("-")
 
-            # Initialize an empty dictionary to store the results
-            result_dict = {}
+        #     # Initialize an empty dictionary to store the results
+        #     result_dict = {}
 
-            # Iterate through the parts and extract month and names
-            for part in parts:
-                # Split each part into month and names
-                month, *names = part.split(",")
+        #     # Iterate through the parts and extract month and names
+        #     for part in parts:
+        #         # Split each part into month and names
+        #         month, *names = part.split(",")
                 
-                # Remove any leading or trailing whitespace
-                month = month.strip()
-                names = [name.strip() for name in names]
+        #         # Remove any leading or trailing whitespace
+        #         month = month.strip()
+        #         names = [name.strip() for name in names]
                 
-                # Add the month and names to the dictionary
-                if month not in result_dict:
-                    result_dict[month] = names
-                else:
-                    result_dict[month].extend(names)
+        #         # Add the month and names to the dictionary
+        #         if month not in result_dict:
+        #             result_dict[month] = names
+        #         else:
+        #             result_dict[month].extend(names)
 
             
 
-            if result_dict:
+        #     if result_dict:
 
                 
-                for month, appointments in result_dict.items():
+        #         for month, appointments in result_dict.items():
                     
-                    print(f"{month}: {len(appointments)}patient")
+        #             print(f"{month}: {len(appointments)}patient")
 
-                print("\n")
+        #         print("\n")
                     
                     
+        #     else:
+        #         print("No appointments scheduled.")
+
+
+        for doctor in doctors:
+            monthly_patient = doctor.get_monthly_appointment().items()
+            print(doctor.get_full_name())
+            if monthly_patient:
+                for month, patient in doctor.get_monthly_appointment().items():
+                    
+                    print(f"{month}: {len(patient)}")
+
             else:
-                print("No appointments scheduled.")
+                print("0 appointments")
+
+
         
         print(" ----- Illness type ------")
 

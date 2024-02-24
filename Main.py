@@ -63,7 +63,7 @@ def main():
 
         elif op == "2":
             # 2- Book appointments/ View appointments
-            admin.appointments_management()
+            admin.appointments_management(doctors)
 
 
         elif op == "3":
