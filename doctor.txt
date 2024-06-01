@@ -1,6 +1,10 @@
 Jone,Smith,Pediatrics
 Jone,Carlos,Cardiology
-shankar,Tamang,ST
-Black,panther,life
-ishan,silwal,mutu
-manjil,budathoki,heart
+Sara,Smith,Pediatrics
+Mike,Jones,Cardiology
+Daivd,Smith,Pediatrics
+Shank,Thokar,Physiolog
+Emily,Johnson,Pediatrics
+Adam,Williams,Cardiology
+Priya,Kumar,Pediatrics
+Jake,Brown,Cardiolog

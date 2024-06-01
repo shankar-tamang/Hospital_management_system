@@ -2,3 +2,11 @@ Sara,Smith,20,07012345678,B1 234,None,cough,cold
 Mike,Jones,37,07555551234,L2 2AB,None,cough,cold
 Daivd,Smith,15,07123456789,C1 ABC,None,cough,cold
 shankar,tamang,22,222,333,None,cold,headache
+Emily,Johnson,28,07654321098,A5 678,None,cough,cold
+Adam,Williams,45,07890123456,D9 012,None,cold,fever
+Priya,Kumar,32,07987654321,E6 789,None,cold,runny nose
+Jake,Brown,24,07444444444,F7 890,None,cough,sore throat
+Sophia,Lee,29,07222222222,G8 901,None,cough,fatigue
+Koni,Harey,34,2445555,24 ba,None,cough,cold
+Harey,Marko,23,45667777,23 ba,None,cough,cold
+Mary,Kom,35,245555,34 ba,None,cough,cold

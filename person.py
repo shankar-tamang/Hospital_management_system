@@ -11,6 +11,7 @@ class Person:
 
     def set_first_name(self, new_first_name):
         self.__first_name = new_first_name
+        print("first name has been set.")
 
     def get_surname(self):
         return self.__surname

@@ -130,7 +130,7 @@ class Admin:
             
             print('ID |          Full name           |  Speciality')
             
-            doctors = self.load_doctor_file("doctor.txt")    #loading doctors details from doctor.txt and creating a list of instance called doctors    
+            # doctors = self.load_doctor_file("doctor.txt")    #loading doctors details from doctor.txt and creating a list of instance called doctors    
             self.view(doctors)                 
  
 
@@ -171,15 +171,25 @@ class Admin:
                 op = int(input('Input: '))
                 if op == 1:
                     new_first_name = input("Enter the new first name:")
-                    doctors[index].set_first_name(index,new_first_name,'doctor.txt')
+                    # doctors[index].set_first_name(index,new_first_name,'doctor.txt')
+                    doctors[index].set_first_name(new_first_name)
+                    print("Doctors first name has been updated.")
 
                 elif op == 2:
                     new_surname = input("Enter the new surname: ")
-                    doctors[index].set_surname(index,new_surname,'doctor.txt')
+                    # doctors[index].set_surname(index,new_surname,'doctor.txt')
+                    doctors[index].set_surname(new_surname)
+                    print("Doctors surname has been updated.")
+
+
 
                 elif op == 3:
                     new_speciality = input("Enter the new Speciality:")
-                    doctors[index].set_speciality(index,new_speciality,'doctor.txt')
+                    # doctors[index].set_speciality(index,new_speciality,'doctor.txt')
+                    doctors[index].set_speciality(new_speciality)
+                    print(f"")
+                    print("Doctors speciality has been updated.")
+
 
                 else: 
                     print("Invalid input.")
@@ -694,6 +704,8 @@ class Admin:
                     
                     # Create a new Patient object and append it to the patient_list
                     symptoms = string_list[6:]
+                    symptoms = [symptom.lower() for symptom in symptoms]
+
                     symptoms[-1] = symptoms[-1].replace('\n', '')
                     patient_list.append(                     
                         Patient(string_list[0],string_list[1],string_list[2],string_list[3],string_list[4],string_list[5],symptoms)

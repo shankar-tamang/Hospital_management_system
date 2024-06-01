@@ -1,1 +1,0 @@
-do i need to remove discharge patients from the patients.txtt as the patient will come again or should i let them be as they will be remove

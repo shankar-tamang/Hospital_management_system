@@ -30,8 +30,7 @@ class Doctor(Person):
     #         for line in lines:
     #             file.write(line)
         
-    def set_first_name(self,new_first_name):
-        self.__first_name = new_first_name
+
 
     # def set_surname(self,index,surname,file_name):
     #     with open(file_name) as file:
@@ -43,8 +42,8 @@ class Doctor(Person):
     #         for line in lines:
     #             file.write(line)
     
-    def set_surname(self,new_surname):
-        self.__surname = new_surname
+    # def set_surname(self,new_surname):
+    #     self.__surname = new_surname
 
     def get_speciality(self):        
         return self.__speciality
